@@ -20,7 +20,6 @@ import (
 	"syscall"
 	"time"
 
-	grpcClient "github.com/omec-project/config5g/proto/client"
 	protos "github.com/omec-project/config5g/proto/sdcoreConfig"
 	"github.com/omec-project/nssf/consumer"
 	"github.com/omec-project/nssf/context"
@@ -106,7 +105,7 @@ func (nssf *NSSF) Initialize(c *cli.Context) error {
 // Then it updates UDR configuration.
 func manageGrpcClient(webuiUri string) {
 	var configChannel chan *protos.NetworkSliceResponse
-	var client grpcClient.ConfClient
+	var client ConfClient
 	var stream protos.ConfigService_NetworkSliceSubscribeClient
 	var err error
 	count := 0
@@ -142,7 +141,7 @@ func manageGrpcClient(webuiUri string) {
 				logger.InitLog.Infoln("UDR updateConfig is triggered.")
 			}
 		} else {
-			client, err = grpcClient.ConnectToConfigServer(webuiUri)
+			client, err = ConnectToConfigServer(webuiUri)
 			stream = nil
 			configChannel = nil
 			logger.InitLog.Infoln("Connecting to config server.")
